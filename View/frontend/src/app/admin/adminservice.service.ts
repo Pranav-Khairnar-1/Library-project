@@ -20,6 +20,8 @@ export class AdminserviceService {
 
 
   getAll(): Observable<User[]>{
+    this.temp = localStorage.getItem("token");
+    this.Authtoken = this.temp;
     var header = new HttpHeaders({
       'token': this.Authtoken
      });
@@ -28,6 +30,8 @@ export class AdminserviceService {
   }
 
   AddUser(Userdata: any) {
+    this.temp = localStorage.getItem("token");
+    this.Authtoken = this.temp;
     var header = new HttpHeaders({
       'token': this.Authtoken
      });

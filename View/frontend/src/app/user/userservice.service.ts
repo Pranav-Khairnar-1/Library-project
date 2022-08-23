@@ -16,6 +16,8 @@ export class UserserviceService {
   }
 
   GetUser(userdata: any):Observable<any> {
+    this.temp = localStorage.getItem("token");
+    this.Authtoken = this.temp;
     var header = new HttpHeaders({
       'token': this.Authtoken
      });
@@ -23,6 +25,8 @@ export class UserserviceService {
   }
 
   ReturnBook(userdata: any):Observable<any> {
+    this.temp = localStorage.getItem("token");
+    this.Authtoken = this.temp;
     var header = new HttpHeaders({
       'token': this.Authtoken
      });
@@ -30,6 +34,8 @@ export class UserserviceService {
   }
 
   BorrowBook(userdata: any):Observable<any> {
+    this.temp = localStorage.getItem("token");
+    this.Authtoken = this.temp;
     var header = new HttpHeaders({
       'token': this.Authtoken
      });

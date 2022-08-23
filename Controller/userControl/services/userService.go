@@ -29,11 +29,12 @@ func NewService(db *gorm.DB, repo repository.Repository) *UserService {
 func (s *UserService) AddUser(user1 user.User) error {
 	var temp = true
 	var usercheck user.User
+	var penaltemp = 0
 	s.Db.First(&usercheck, "username=?", user1.Username)
 	UnitOfWork := repository.NewUnitOfWork(s.Db, false)
 	user1.ID = uuid.New()
 	user1.Active = &temp
-	user1.Penalty = 0
+	user1.Penalty = &penaltemp
 	user1.CreatedAt = time.Now()
 	fmt.Println(usercheck)
 	if usercheck.Username == "" {
@@ -79,7 +80,7 @@ func (s *UserService) GetUser(username string) (user.UserFrontend, error) {
 	Userfront.LastName = User.LastName
 	Userfront.Email = User.Email
 	Userfront.ContactNumber = User.ContactNumber
-	Userfront.Penalty = User.Penalty
+	Userfront.Penalty = *User.Penalty
 	Userfront.Usename = User.Username
 	Userfront.JOiningDate = User.CreatedAt.String()
 	Userfront.Booksids = make([]int, len(User.UserBooks))
@@ -105,7 +106,9 @@ func (s *UserService) ReturnBook(username string, BookID int) error {
 	m = s.Db.Debug().First(&book, "id=?", BookID)
 	fmt.Println(m.Error)
 	fmt.Println("book count Before", book.Count)
-	book.Count++
+	var countTemp = *book.Count
+	countTemp++
+	book.Count = &countTemp
 	fmt.Println("book count After", book.Count)
 	s.Db.Save(book)
 	UnitOfWork.Commit()
@@ -122,7 +125,9 @@ func (s *UserService) AddNewUserBook(username string, id int) error {
 		return errors.New("you can only take 5 books")
 	}
 	s.Db.Debug().First(&book1, "id=?", id)
-	book1.Count--
+	var countTemp = *book1.Count
+	countTemp--
+	book1.Count = &countTemp
 	s.Db.Save(book1)
 	fmt.Println(id)
 	userbookdata1.BookID = id
@@ -162,12 +167,12 @@ func (s *UserService) UpdatePenalty() {
 
 				temp1 = (days - 1) * 5
 			}
-			ans = UserArr[i].Penalty + int(temp1)
+			ans = *UserArr[i].Penalty + int(temp1)
 
 		}
 
 		temp := UserArr[i]
-		temp.Penalty = ans
+		temp.Penalty = &ans
 		temp.UserBooks = nil
 		ans = 0
 		s.Db.Save(&temp)
@@ -193,7 +198,7 @@ func (s *UserService) Getall() ([]user.UserFrontend, error) {
 	for i := 0; i < len(UserArr); i++ {
 		Userfront[i].ID = UserArr[i].ID
 		Userfront[i].Usename = UserArr[i].Username
-		Userfront[i].Penalty = UserArr[i].Penalty
+		Userfront[i].Penalty = *UserArr[i].Penalty
 		Userfront[i].JOiningDate = UserArr[i].CreatedAt.String()
 		Userfront[i].FirstName = UserArr[i].FirstName
 		Userfront[i].LastName = UserArr[i].LastName

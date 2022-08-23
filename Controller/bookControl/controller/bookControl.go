@@ -75,6 +75,9 @@ func (b *BookController) GetAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func (b *BookController) UpdateBook(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("***********************************************************************")
+	fmt.Println("***UPDATE BOOK IS CALLED ******")
+	fmt.Println("***********************************************************************")
 	if !valid.IsValidCoockie(w, r) {
 		w.WriteHeader(502)
 		fmt.Fprintf(w, "Please Login Again")

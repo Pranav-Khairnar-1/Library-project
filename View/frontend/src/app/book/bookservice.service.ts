@@ -16,6 +16,8 @@ export class BookserviceService {
    }
 
   getAll(): Observable<bookdetails[]>{
+    this.temp = localStorage.getItem("token");
+    this.Authtoken = this.temp;
     var header = new HttpHeaders({
       'token': this.Authtoken
      });
@@ -23,6 +25,8 @@ export class BookserviceService {
   }
 
   AddBook(Bookdata: any) {
+    this.temp = localStorage.getItem("token");
+    this.Authtoken = this.temp;
     var header = new HttpHeaders({
       'token': this.Authtoken
      });
@@ -30,6 +34,8 @@ export class BookserviceService {
   }
 
   DeleteBook(id: string) {
+    this.temp = localStorage.getItem("token");
+    this.Authtoken = this.temp;
     var header = new HttpHeaders({
       'token': this.Authtoken
      });
@@ -38,6 +44,8 @@ export class BookserviceService {
   }
 
   UpdateBook(id: string,Bookdata:any) {
+    this.temp = localStorage.getItem("token");
+    this.Authtoken = this.temp;
     var header = new HttpHeaders({
       'token': this.Authtoken
      });

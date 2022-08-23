@@ -29,10 +29,23 @@ export class UserhomeComponent implements OnInit {
     setTimeout(() => {
       this.getAllbooks();
     }, 500);
+    this.redirectIfNotLogedIn();
    }
 
   ngOnInit(): void {
   }
+
+  redirectIfNotLogedIn(){
+    if (this.helper.isTokenExpired(this.userdata)){
+     alert("login is expired");
+     this.router.navigate(['/']);
+    }
+ 
+    setTimeout(() => {
+     this.redirectIfNotLogedIn();
+    }, 1000);
+ 
+   }
 
   getAllbooks(){
     this.service2.getAll().subscribe(data=>{

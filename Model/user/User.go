@@ -12,7 +12,7 @@ type User struct {
 	Username      string                           `json:"username"`
 	Password      string                           `json:"password"`
 	UserBooks     []modeluserBookData.UserBookData `gorm:"foreignKey:uid" json:"userbooks"`
-	Penalty       int                              `json:"penalty"`
+	Penalty       *int                             `json:"penalty"`
 	Active        *bool                            `json:"active"`
 	FirstName     string                           `json:"firstname"`
 	LastName      string                           `json:"lastname"`
@@ -23,11 +23,12 @@ type User struct {
 func CreateNewUser(username, Password string) *User {
 	var test User
 	var temp1 = true
+	var temp2 = 0
 	temp := uuid.New()
 	test.Username = username
 	test.Password = Password
 	test.Active = &temp1
-	test.Penalty = 0
+	test.Penalty = &temp2
 	test.ID = temp
 	return &test
 }

@@ -4,7 +4,7 @@ type Book struct {
 	ID         int    `json:"id"`
 	BookName   string `json:"bookname"`
 	BookAuthor string `json:"bookauthor"`
-	Count      int    `json:"count"`
+	Count      *int   `json:"count"`
 }
 
 func CreateNewBook(id, count int, bname, bauth string) *Book {
@@ -12,6 +12,6 @@ func CreateNewBook(id, count int, bname, bauth string) *Book {
 	newbook.ID = id
 	newbook.BookName = bname
 	newbook.BookAuthor = bauth
-	newbook.Count = count
+	newbook.Count = &count
 	return &newbook
 }

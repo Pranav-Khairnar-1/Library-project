@@ -26,8 +26,21 @@ export class BookhomeComponent implements OnInit {
      this.getAllbooks()
       this.tokentemp = localStorage.getItem('token');
       this.tokenact=this.helper.decodeToken(this.tokentemp);
+      this.redirectIfNotLogedIn();
    }
 
+
+   redirectIfNotLogedIn(){
+    if (this.helper.isTokenExpired(this.tokentemp)){
+     alert("login is expired");
+     this.router.navigate(['/']);
+    }
+ 
+    setTimeout(() => {
+     this.redirectIfNotLogedIn();
+    }, 1000);
+ 
+   }
    getAllbooks(){
     this.service.getAll().subscribe(data=>{
       this.Books = data

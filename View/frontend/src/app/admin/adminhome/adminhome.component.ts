@@ -41,10 +41,10 @@ export class AdminhomeComponent implements OnInit {
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement !: User | null;
   constructor(private service2:BookserviceService,private router : Router,private dialog:MatDialog , private service:AdminserviceService,private service1:LoginserviceService) {
-    this.GetData();
    this.Admindata = localStorage.getItem('token');
    console.log("I am aaa",this.Admindata);
     this.RetData = this.helper.decodeToken(this.Admindata);
+    
    }
 
   ngOnInit(): void {
@@ -58,7 +58,7 @@ export class AdminhomeComponent implements OnInit {
       itemsShowLimit: 50,
       allowSearchFilter: true
     };
-
+    this.GetData();
 
   }
 
@@ -69,6 +69,18 @@ export class AdminhomeComponent implements OnInit {
   onSelectAll(items: any) {
     console.log(items);
   } 
+
+  redirectIfNotLogedIn(){
+    if (this.helper.isTokenExpired(this.Admindata)){
+     alert("login is expired");
+     this.router.navigate(['/']);
+    }
+ 
+    setTimeout(() => {
+     this.redirectIfNotLogedIn();
+    }, 1000);
+ 
+   }
   
   Visibleuserforid(user : User ):boolean {
     for (let index = 0; index < this.selectedItems.length; index++) {

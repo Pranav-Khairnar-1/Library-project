@@ -26,9 +26,22 @@ export class AllBooksForUserComponent implements OnInit {
      this.UserdataAct = this.helper.decodeToken(this.userdata);
      this.filluser();
      this.getAllbooks();
+     this.redirectIfNotLogedIn();
    }
 
   ngOnInit(): void {
+  }
+
+  redirectIfNotLogedIn(){
+   if (this.helper.isTokenExpired(this.userdata)){
+    alert("login is expired");
+    this.router.navigate(['/']);
+   }
+
+   setTimeout(() => {
+    this.redirectIfNotLogedIn();
+   }, 1000);
+
   }
 
   BorrowClicked(book:bookdetails){
@@ -52,7 +65,7 @@ error(err) {
       this.AllBooks = data
       console.log(this.AllBooks)
      })
-
+   
      setTimeout(() => {
       for (let index1 = 0; index1 <this.Userin.bookids.length; index1++) {
         for (let index2 = 0; index2 < this.AllBooks.length; index2++) {
@@ -61,9 +74,17 @@ error(err) {
                         this.AllBooks.splice(index2,1);
                      }
         }
- }
- console.log(this.AllBooks)
-     }, 200);
+ } 
+
+ for (let index2 = 0; index2 < this.AllBooks.length; index2++) {
+  if(this.AllBooks[index2].count==0){
+    this.AllBooks.splice(index2,1);
+    index2--;
+  }
+}
+     
+     }, 300);
+    
 
    }
 

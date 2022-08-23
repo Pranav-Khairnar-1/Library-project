@@ -1,7 +1,9 @@
 package bookControl
 
 import (
+	"errors"
 	book "pranav/Model/book"
+	userBook "pranav/Model/userBookData"
 	"pranav/repository"
 
 	"github.com/jinzhu/gorm"
@@ -34,6 +36,7 @@ func (s *BookService) GetAllBooks() ([]book.Book, error) {
 	UnitOfWork := repository.NewUnitOfWork(s.Db, false)
 	var Books []book.Book
 	m := s.Repo.GetAll(UnitOfWork, &Books, []string{})
+	//m := s.Db.Where("count> ?", 0).Find(&Books)
 	if m != nil {
 		UnitOfWork.Complete()
 		return nil, m
@@ -56,7 +59,12 @@ func (s *BookService) UpdateBook(id int, b1 book.Book) error {
 
 func (s *BookService) DeleteBook(id int) error {
 	var temp book.Book
+	var borrowDetails []userBook.UserBookData
 	UnitOfWork := repository.NewUnitOfWork(s.Db, false)
+	s.Db.Where("book_id LIKE ?", id).Find(&borrowDetails)
+	if len(borrowDetails) > 0 {
+		return errors.New("this book cannot be deleted as it is borrowed by some users")
+	}
 	m := s.Db.Unscoped().Where("id=?", id).Delete(&temp)
 	if m != nil {
 
